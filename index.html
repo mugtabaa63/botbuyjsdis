@@ -9,31 +9,33 @@
     <h1>مرحبًا بك في صفحة التكتات</h1>
     <button id="create-ticket">إنشاء تكت</button>
 
-    <script>
-        document.getElementById("create-ticket").addEventListener("click", function() {
-            // إدخال معرف المستخدم
-            const userId = prompt("أدخل معرفك في ديسكورد:");
+   <script>
+    document.getElementById("create-ticket").addEventListener("click", function() {
+        const userId = prompt("أدخل معرفك في ديسكورد:");
 
-            if (userId) {
-                fetch("http://localhost:3000/create-ticket", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ userId: userId })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                })
-                .catch(error => {
-                    console.error("خطأ:", error);
-                    alert("حدث خطأ أثناء محاولة إنشاء التكت.");
-                });
-            } else {
-                alert("لم يتم إدخال المعرف!");
-            }
-        });
-    </script>
+        if (userId) {
+            fetch("http://localhost:3000/create-ticket", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ userId: userId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message); // عرض رسالة النجاح أو الخطأ
+                }
+            })
+            .catch(error => {
+                console.error("خطأ:", error);
+                alert("حدث خطأ أثناء محاولة إنشاء التكت.");
+            });
+        } else {
+            alert("لم يتم إدخال المعرف!");
+        }
+    });
+</script>
+
 </body>
 </html>
