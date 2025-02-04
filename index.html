@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ربط الحساب والشراء</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            direction: rtl;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ربط الحساب والشراء</h1>
+        
+        <!-- ربط الحساب -->
+        <h2>ربط حساب الديسكورد</h2>
+        <form id="link-form">
+            <input type="text" id="discordId" placeholder="أدخل معرف ديسكورد" required>
+            <input type="text" id="linkCode" placeholder="أدخل كود الربط" required>
+            <button type="submit">ربط الحساب</button>
+        </form>
+        <p id="link-message"></p>
+
+        <!-- شراء منتج -->
+        <h2>شراء منتج</h2>
+        <form id="purchase-form">
+            <input type="text" id="buyerDiscordId" placeholder="أدخل معرف ديسكورد" required>
+            <input type="text" id="productName" placeholder="أدخل اسم المنتج" required>
+            <button type="submit">شراء</button>
+        </form>
+        <p id="purchase-message"></p>
+    </div>
+
+    <script>
+        // ربط الحساب
+        document.getElementById('link-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const discordId = document.getElementById('discordId').value;
+            const linkCode = document.getElementById('linkCode').value;
+
+            const response = await fetch('/link', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ discord_id: discordId, code: linkCode })
+            });
+
+            const message = await response.text();
+            document.getElementById('link-message').innerText = message;
+        });
+
+        // شراء منتج
+        document.getElementById('purchase-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const discordId = document.getElementById('buyerDiscordId').value;
+            const productName = document.getElementById('productName').value;
+
+            const response = await fetch('/purchase', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ discord_id: discordId, product_name: productName })
+            });
+
+            const message = await response.text();
+            document.getElementById('purchase-message').innerText = message;
+        });
+    </script>
+</body>
+</html>
