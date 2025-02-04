@@ -3,38 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ربط مع بوت ديسكورد</title>
+    <title>إرسال إيمبد عبر البوت</title>
 </head>
 <body>
-    <h1>مرحبًا بك في صفحة التكتات</h1>
-    <button id="create-ticket">إنشاء تكت</button>
+    <h1>إرسال إيمبد عبر بوت ديسكورد</h1>
+    
+    <label for="serverId">ID السيرفر:</label>
+    <input type="text" id="serverId" placeholder="أدخل ID السيرفر" />
+    <br><br>
+    
+    <label for="channelId">ID القناة:</label>
+    <input type="text" id="channelId" placeholder="أدخل ID القناة" />
+    <br><br>
+
+    <label for="message">نص الرسالة:</label>
+    <textarea id="message" placeholder="أدخل الرسالة التي تريد إرسالها"></textarea>
+    <br><br>
+
+    <button id="sendEmbed">إرسال الإيمبد</button>
 
     <script>
-        document.getElementById("create-ticket").addEventListener("click", function() {
-            // طلب ID المستخدم داخل ديسكورد
-            const userId = prompt("أدخل ID الخاص بك في ديسكورد:");
+        document.getElementById("sendEmbed").addEventListener("click", function() {
+            const serverId = document.getElementById("serverId").value;
+            const channelId = document.getElementById("channelId").value;
+            const message = document.getElementById("message").value;
 
-            // التأكد من أن المستخدم أدخل ID صحيح
-            if (userId) {
-                fetch("http://localhost:3000/create-ticket", {
+            if (serverId && channelId && message) {
+                fetch("http://localhost:3000/send-embed", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ userId: userId })
+                    body: JSON.stringify({ serverId: serverId, channelId: channelId, message: message })
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.message) {
-                        alert(data.message); // عرض رسالة النجاح أو الخطأ
+                    if (data.success) {
+                        alert('تم إرسال الإيمبد بنجاح!');
+                    } else {
+                        alert('حدث خطأ: ' + data.message);
                     }
                 })
                 .catch(error => {
-                    console.error("خطأ في الطلب:", error);
-                    alert("حدث خطأ أثناء محاولة إنشاء التكت.");
+                    console.error("خطأ:", error);
+                    alert("حدث خطأ أثناء إرسال الإيمبد.");
                 });
             } else {
-                alert("لم يتم إدخال المعرف!");
+                alert("من فضلك أدخل جميع البيانات المطلوبة!");
             }
         });
     </script>
