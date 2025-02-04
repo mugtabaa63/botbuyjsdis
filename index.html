@@ -3,29 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوت ديسكورد</title>
+    <title>ربط مع بوت ديسكورد</title>
 </head>
 <body>
-    <h1>مرحبًا بك في صفحة بوت ديسكورد</h1>
+    <h1>مرحبًا بك في صفحة التكتات</h1>
     <button id="create-ticket">إنشاء تكت</button>
 
     <script>
         document.getElementById("create-ticket").addEventListener("click", function() {
-            fetch("https://your-server.com/api/create-ticket", {
-                method: "POST", // تأكد من أن السيرفر يسمح بهذه الطريقة
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ userId: "YOUR_DISCORD_USER_ID" })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert("تم إنشاء التكت بنجاح!");
-            })
-            .catch(error => {
-                console.error("خطأ:", error);
-                alert("حدث خطأ أثناء إنشاء التكت.");
-            });
+            // إدخال معرف المستخدم
+            const userId = prompt("أدخل معرفك في ديسكورد:");
+
+            if (userId) {
+                fetch("http://localhost:3000/create-ticket", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ userId: userId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => {
+                    console.error("خطأ:", error);
+                    alert("حدث خطأ أثناء محاولة إنشاء التكت.");
+                });
+            } else {
+                alert("لم يتم إدخال المعرف!");
+            }
         });
     </script>
 </body>
